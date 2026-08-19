@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Uber-for-X 手机工作台</title>
+    <meta name="description" content="Uber-for-X 应急响应手机工作台：一键求助、实时派单、地图调度演示"/>
+    <meta name="theme-color" content="#0f172a"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-title" content="Uber-for-X 工作台"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="logo">🚨</span>
+        <div class="brand-text">
+            <h1>Uber-for-X 工作台</h1>
+            <p id="statusLine">应急响应演示 · 初始化中…</p>
+        </div>
+    </div>
+    <div class="stat-badge" id="copCount">0 名警员</div>
+</header>
+
+<main>
+    <!-- 地图页 -->
+    <section id="tab-map" class="tab active">
+        <div id="map"></div>
+        <div id="mapCard" class="map-card hidden">
+            <button id="mapCardClose" class="close-btn" aria-label="关闭">×</button>
+            <div class="map-card-title" id="mapCardTitle">标题</div>
+            <div class="map-card-body" id="mapCardBody">内容</div>
+            <div class="map-card-actions hidden" id="mapCardActions"></div>
+        </div>
+    </section>
+
+    <!-- 求助页 -->
+    <section id="tab-help" class="tab">
+        <div class="panel">
+            <div class="field">
+                <label for="userName">我的昵称</label>
+                <input id="userName" type="text" maxlength="20" placeholder="例如：市民小王"/>
+            </div>
+
+            <div class="field">
+                <label>求助位置</label>
+                <div class="loc-row">
+                    <button id="useGps" class="btn btn-secondary">📍 使用我的定位</button>
+                    <button id="pickOnMap" class="btn btn-secondary">🗺️ 在地图上选点</button>
+                </div>
+                <p id="selectedAddress" class="address-line">尚未选择位置，请先定位或选点</p>
+            </div>
+
+            <button id="sosBtn" class="btn sos" disabled>🆘 一键求助</button>
+            <p class="hint">发出后会自动通知附近 2 公里内的空闲警员，可切换到「接警」页查看派单过程。</p>
+
+            <ol id="timeline" class="timeline">
+                <li class="step" data-step="sent"><span>1</span>求助已发出</li>
+                <li class="step" data-step="notified"><span>2</span>已通知附近警员</li>
+                <li class="step" data-step="accepted"><span>3</span>警员接单</li>
+            </ol>
+
+            <div id="acceptedCard" class="accepted-card hidden"></div>
+        </div>
+    </section>
+
+    <!-- 接警页 -->
+    <section id="tab-dispatch" class="tab">
+        <div class="panel">
+            <div class="toolbar">
+                <label class="switch">
+                    <input type="checkbox" id="autoDemo" checked/>
+                    <span>演示自动来单</span>
+                </label>
+                <button id="simulateBtn" class="btn btn-secondary">➕ 模拟一条求助</button>
+            </div>
+            <p class="hint">等待派单的求助会出现在这里；也可以先到「求助」页发起一条，两边实时同步。</p>
+            <div id="requestList" class="request-list"></div>
+        </div>
+    </section>
+</main>
+
+<nav class="tab-bar">
+    <button class="tab-btn active" data-tab="tab-map">🗺️<br/><span>地图</span></button>
+    <button class="tab-btn" data-tab="tab-help">🆘<br/><span>求助</span></button>
+    <button class="tab-btn" data-tab="tab-dispatch">📟<br/><span>接警</span></button>
+</nav>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
